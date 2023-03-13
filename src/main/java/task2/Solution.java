@@ -37,6 +37,7 @@ public class Solution {
         System.out.println(time(3,2,2));
         System.out.println(time(7,3,2));
         System.out.println(time(10000,10000,10000));
+        System.out.println(time(10000,10000,10000));
     }
 
 }

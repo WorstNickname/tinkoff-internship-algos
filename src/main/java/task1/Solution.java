@@ -25,8 +25,7 @@ public class Solution {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String s = scanner.nextLine().replaceAll(" ", "");
-        System.out.println(isOrdered(s));
+        String[] s = scanner.nextLine().split(" ");
     }
 
 }
