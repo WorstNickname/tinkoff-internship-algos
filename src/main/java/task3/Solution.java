@@ -3,7 +3,10 @@ package task3;
 public class Solution {
 
     public static int min(int length, String str) {
-        int left = 0, right = 0, min = length, res = -1;
+        int left = 0;
+        int right = 0;
+        int min = length;
+        int res = -1;
 
         if (length < 4 || str.equals("")) {
             return res;

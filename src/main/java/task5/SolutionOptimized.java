@@ -1,17 +1,23 @@
 package task5;
 
-public class Solu2 {
+public class SolutionOptimized {
 
     public static int days(int length, int[] days) {
         int left = 0;
         int right = 1;
         int res = 0;
-        int sum = 0;
-        sum += days[left];
+        int sum = days[left];
         while (left < length) {
+            if (right <= left) {
+                right = left + 1;
+            }
             if (sum == 0) {
                 res = res + (length - left);
+                sum -= days[left];
                 left++;
+                if (left < length) {
+                    sum += days[left];
+                }
             } else {
                 while (right < length) {
                     sum += days[right];
@@ -41,5 +47,6 @@ public class Solu2 {
         System.out.println(days(4, new int[]{1, 2, 3, -6}));
         System.out.println(days(5, new int[]{-1, 1, 2, -3, 6}));
         System.out.println(days(4, new int[]{-100, 100, -100, 100}));
+        System.out.println(days(4, new int[]{0, 0, 0, 1}));
     }
 }

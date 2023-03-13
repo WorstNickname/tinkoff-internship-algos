@@ -4,19 +4,19 @@ import java.util.Scanner;
 
 public class Solution {
 
-    public static String isOrdered(String queue) {
-        boolean increasing = false;
-        boolean decreasing = false;
-        for (int i = 0; i < queue.length() - 1; i++) {
-            if (queue.charAt(i + 1) > queue.charAt(i)) {
-                increasing = true;
+    public static String isOrdered(String order) {
+        boolean isIncreasing = false;
+        boolean isDecreasing = false;
+        for (int i = 0; i < order.length() - 1; i++) {
+            if (order.charAt(i + 1) > order.charAt(i)) {
+                isIncreasing = true;
             }
 
-            if (queue.charAt(i + 1) < queue.charAt(i)) {
-                decreasing = true;
+            if (order.charAt(i + 1) < order.charAt(i)) {
+                isDecreasing = true;
             }
 
-            if (increasing && decreasing) {
+            if (isIncreasing && isDecreasing) {
                 return "NO";
             }
         }
