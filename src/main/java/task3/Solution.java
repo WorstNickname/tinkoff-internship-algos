@@ -1,28 +1,29 @@
 package task3;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class Solution {
 
-    public static int min(int length, String str) {
+    public static int getMinGoodSubstring(int length, String str) {
         int left = 0;
         int right = 0;
         int min = length;
-        int res = -1;
+        int result = -1;
+        int[] hash = {0, 0, 0, 0};
 
         if (length < 4 || str.equals("")) {
-            return res;
+            return result;
         }
-        //            a  b  c  d
-        //            0  1  2  3
-        int[] hash = {0, 0, 0, 0};
+
         hash[str.charAt(right) - 'a']++;
         while (right < length) {
             if (hash[0] > 0 && hash[1] > 0 && hash[2] > 0 && hash[3] > 0) {
                 hash[str.charAt(left) - 'a']--;
                 int subStringLength = str.substring(left, right + 1).length();
-                if (subStringLength <= min) {
-                    min = subStringLength;
-                    res = min;
-                }
+                min = Math.min(subStringLength, min);
+                result = min;
                 left++;
             } else {
                 right++;
@@ -31,16 +32,15 @@ public class Solution {
                 }
             }
         }
-        return res;
+        return result;
     }
 
-    public static void main(String[] args) {
-        System.out.println(min(12, "aabbccddbadd"));
-        System.out.println(min(16, "aaaabbbbccccdddd"));
-        System.out.println(min(7, "dbbccca"));
-        System.out.println(min(7, "abcabac"));
-        System.out.println(min(4, "abcd"));
-        System.out.println(min(4, "aaaa"));
-        System.out.println(min(0, ""));
+    public static void main(String[] args) throws IOException {
+        try (var reader = new BufferedReader(new InputStreamReader(System.in))) {
+            int length = Integer.parseInt(reader.readLine());
+            String str = reader.readLine();
+            System.out.println(getMinGoodSubstring(length, str));
+        }
     }
+
 }

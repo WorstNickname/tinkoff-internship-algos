@@ -1,43 +1,50 @@
 package task2;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
 public class Solution {
 
-    public static int time(int juniors, int seniors, int reviews) {
-        int totalTime = 0;
+    public static int getTimeForReviews(int juniors, int seniors, int reviews) {
+        int time = 0;
         int availableSeniors = seniors;
         int reqReviews;
         for (int i = 1; i <= juniors; i++) {
             reqReviews = reviews;
-
             if (reqReviews == availableSeniors) {
-                totalTime++;
+                time++;
                 availableSeniors = seniors;
                 continue;
             }
 
             if (reqReviews > availableSeniors) {
                 reqReviews -= availableSeniors;
-                totalTime++;
+                time++;
                 availableSeniors = seniors;
             }
 
             if (reqReviews < availableSeniors) {
                 if (i == juniors) {
-                    totalTime += 1;
+                    time += 1;
                     break;
                 } else {
                     availableSeniors -= reqReviews;
                 }
             }
         }
-        return totalTime;
+        return time;
     }
 
-    public static void main(String[] args) {
-        System.out.println(time(3,2,2));
-        System.out.println(time(7,3,2));
-        System.out.println(time(10000,10000,10000));
-        System.out.println(time(10000,10000,10000));
+    public static void main(String[] args) throws IOException {
+        try (var reader = new BufferedReader(new InputStreamReader(System.in))) {
+            int[] input = Arrays.stream(reader.readLine()
+                    .split("\\s"))
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
+            System.out.println(getTimeForReviews(input[0], input[1], input[2]));
+        }
     }
 
 }

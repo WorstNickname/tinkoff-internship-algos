@@ -1,9 +1,12 @@
 package task5;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
-/*
-*  O(N)
-* */
+
+
 public class SolutionVer2 {
 
     public static int days(int length, int[] days) {
@@ -21,9 +24,14 @@ public class SolutionVer2 {
         return res;
     }
 
-    public static void main(String[] args) {
-        System.out.println(days(4, new int[]{0, -1, -1, 1}));
-        System.out.println(days(3, new int[]{42, -42, 42}));
-
+    public static void main(String[] args) throws IOException {
+        try (var reader = new BufferedReader(new InputStreamReader(System.in))) {
+            int length = Integer.parseInt(reader.readLine());
+            int[] array = Arrays.stream(reader.readLine().split(" "))
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
+            System.out.println(days(length, array));
+        }
     }
+
 }

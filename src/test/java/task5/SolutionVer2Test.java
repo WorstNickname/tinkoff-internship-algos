@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SolutionVer2Test {
+
     @ParameterizedTest
     @MethodSource("sources")
     void solutionTest(int length, int[] array, int expected) {
