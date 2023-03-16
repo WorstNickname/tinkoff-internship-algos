@@ -5,60 +5,50 @@ import java.util.Comparator;
 
 public class Solution3 {
 
-    public static void solve(int studCount, int limitSum, int[][] studMarks) {
-        int sumMin = 0;
-        int sumMax = 0;
+    public static int findMaxMedian(int studCount, int limitSum, int[][] studMarks) {
+        int minMarksSum = 0;
+        int maxMarksSum = 0;
+        int medianValue = -1;
         for (int i = 0; i < studCount; i++) {
-            sumMin += studMarks[i][0];
-            sumMax += studMarks[i][1];
+            minMarksSum += studMarks[i][0];
+            maxMarksSum += studMarks[i][1];
         }
 
         // check min boundary constraints
-        if (sumMin > limitSum) {
-            System.out.println("Max median: " + -1);
-            // TODO: 16.03.2023 refactor return
-            return;
-        } else if (sumMin == limitSum) {
+        if (minMarksSum > limitSum) {
+            return medianValue;
+        } else if (minMarksSum == limitSum) {
             // вернуть медиану в массиве из мин чисел
             sortArrayByMinMark(studMarks);
-            int median = findMedianIndex(studMarks);
-            System.out.println("Median: " + studMarks[median][0]);
-            return;
+            int medianIndex = findMedianIndex(studMarks);
+            medianValue = studMarks[medianIndex][0];
+            return medianValue;
         }
-
+        // Сортируем по-большому
         sortArrayByMaxMark(studMarks);
-        int median = findMedianIndex(studMarks);
-        int delta = limitSum - sumMax;
-        int medianValue = studMarks[median][1];
+
+        int medianIndex = findMedianIndex(studMarks);
+        int delta = limitSum - maxMarksSum;
+        medianValue = studMarks[medianIndex][1];
         if (delta >= 0) {
-            System.out.println("Max median: " + medianValue);
-            return;
+            return medianValue;
         }
-
-        delta += decreaseMarksBeforeMedianToMin(studMarks, median);
+        // Срезаем все, что идет в массиве до медианы до min
+        delta += decreaseMarksBeforeMedianToMin(studMarks, medianIndex);
 
         if (delta >= 0) {
-            System.out.println("Max median: " + medianValue);
-            return;
+            return medianValue;
         } else {
-            // TODO: 16.03.2023
-//            int minMark = Integer.MAX_VALUE;
-//            for (int i = median; i < studMarks.length; i++) {
-//                minMark = Math.min(minMark, studMarks[i][0]);
-//            }
-            int minMark = findMinMark(studMarks, median, studCount);
-
-//            delta -= 12;
+            int minMark = findMinMark(studMarks, medianIndex, studCount);
 
             OUTER:
             while (delta <= 0 && medianValue != minMark) {
                 int right = studMarks.length - 1;
                 if (delta == 0) {
-                    break OUTER;
+                    break;
                 }
-                while (right > median) {
+                while (right > medianIndex) {
                     if (delta == 0) {
-                        System.out.println(medianValue);
                         break OUTER;
                     }
                     if (studMarks[right][1] == studMarks[right][0] || studMarks[right][1] == medianValue) {
@@ -73,20 +63,20 @@ public class Solution3 {
                     }
                 }
 
-                if (studMarks[median][1] - 1 >= studMarks[median][0]) {
-                    studMarks[median][1]--;
-                    medianValue = studMarks[median][1];
+                if (studMarks[medianIndex][1] - 1 >= studMarks[medianIndex][0]) {
+                    studMarks[medianIndex][1]--;
+                    medianValue = studMarks[medianIndex][1];
                     delta++;
                 } else {
                     right = studMarks.length - 1;
-                    while (right > median) {
+                    while (right > medianIndex) {
                         if (studMarks[right][1] == studMarks[right][0]) {
                             right--;
                         } else {
                             if (studMarks[right][1] - 1 >= studMarks[right][0]) {
                                 studMarks[right][1]--;
                                 delta++;
-                                sortArrayByMaxMark(studMarks, median, studMarks.length - 1);
+                                sortArrayByMaxMark(studMarks, medianIndex, studMarks.length - 1);
                                 medianValue = studMarks[findMedianIndex(studMarks)][1];
                                 break;
                             }
@@ -97,7 +87,7 @@ public class Solution3 {
                 }
             }
         }
-        System.out.println(medianValue);
+        return medianValue;
     }
 
     private static void sortArrayByMaxMark(int[][] marks) {
@@ -144,9 +134,7 @@ public class Solution3 {
 //        int limitSum = 27;
 //        int[][] studMarks = {{11, 14}, {2, 10}, {11, 14}};
 
-
-        solve(studCount, limitSum, studMarks);
-
+        findMaxMedian(studCount, limitSum, studMarks);
     }
 
 
