@@ -1,62 +1,60 @@
 package task6;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Comparator;
 
 public class Solution3 {
 
-    public static int findMaxMedian(int studCount, int limitSum, int[][] studMarks) {
-        int minMarksSum = 0;
-        int maxMarksSum = 0;
+    public static int findMaxMedian(int studCount,
+                                    int limitSum,
+                                    int[][] studMarks,
+                                    int minMarksSum,
+                                    int maxMarksSum) {
         int medianValue = -1;
-        for (int i = 0; i < studCount; i++) {
-            minMarksSum += studMarks[i][0];
-            maxMarksSum += studMarks[i][1];
-        }
 
-        // check min boundary constraints
         if (minMarksSum > limitSum) {
             return medianValue;
         } else if (minMarksSum == limitSum) {
-            // вернуть медиану в массиве из мин чисел
-            sortArrayByMinMark(studMarks);
+            sortByMinMark(studMarks);
             int medianIndex = findMedianIndex(studMarks);
             medianValue = studMarks[medianIndex][0];
             return medianValue;
         }
-        // Сортируем по-большому
-        sortArrayByMaxMark(studMarks);
+
+        sortByMaxMark(studMarks, 0, studCount);
 
         int medianIndex = findMedianIndex(studMarks);
-        int delta = limitSum - maxMarksSum;
+        int delta = maxMarksSum - limitSum;
         medianValue = studMarks[medianIndex][1];
-        if (delta >= 0) {
+        if (delta <= 0) {
             return medianValue;
         }
-        // Срезаем все, что идет в массиве до медианы до min
-        delta += decreaseMarksBeforeMedianToMin(studMarks, medianIndex);
 
-        if (delta >= 0) {
+        delta -= decreaseMarksBeforeMedianToMin(studMarks, medianIndex);
+
+        if (delta <= 0) {
             return medianValue;
         } else {
             int minMark = findMinMark(studMarks, medianIndex, studCount);
 
             OUTER:
-            while (delta <= 0 && medianValue != minMark) {
+            while (delta > 0 && medianValue != minMark) {
                 int right = studMarks.length - 1;
-                if (delta == 0) {
-                    break;
-                }
                 while (right > medianIndex) {
                     if (delta == 0) {
                         break OUTER;
                     }
-                    if (studMarks[right][1] == studMarks[right][0] || studMarks[right][1] == medianValue) {
+                    if (studMarks[right][1] == studMarks[right][0]
+                            || studMarks[right][1] == medianValue) {
                         right--;
                     } else {
-                        if (studMarks[right][1] - 1 >= studMarks[right - 1][1] || studMarks[right][1] >= medianValue) {
+                        if (studMarks[right][1] - 1 >= studMarks[right - 1][1]
+                                || studMarks[right][1] >= medianValue) {
                             studMarks[right][1]--;
-                            delta++;
+                            delta--;
                         } else {
                             right--;
                         }
@@ -66,39 +64,33 @@ public class Solution3 {
                 if (studMarks[medianIndex][1] - 1 >= studMarks[medianIndex][0]) {
                     studMarks[medianIndex][1]--;
                     medianValue = studMarks[medianIndex][1];
-                    delta++;
+                    delta--;
                 } else {
                     right = studMarks.length - 1;
                     while (right > medianIndex) {
-                        if (studMarks[right][1] == studMarks[right][0]) {
-                            right--;
-                        } else {
+                        if (studMarks[right][1] != studMarks[right][0]) {
                             if (studMarks[right][1] - 1 >= studMarks[right][0]) {
                                 studMarks[right][1]--;
-                                delta++;
-                                sortArrayByMaxMark(studMarks, medianIndex, studMarks.length - 1);
+                                delta--;
+                                sortByMaxMark(studMarks, medianIndex, studCount - 1);
                                 medianValue = studMarks[findMedianIndex(studMarks)][1];
                                 break;
                             }
-                            right--;
                         }
+                        right--;
                     }
-
                 }
             }
         }
         return medianValue;
     }
 
-    private static void sortArrayByMaxMark(int[][] marks) {
-        Arrays.sort(marks, Comparator.comparingInt((int[] a) -> a[1]).thenComparingInt(a -> a[0]));
+    private static void sortByMaxMark(int[][] marks, int from, int to) {
+        Arrays.sort(marks, from, to, Comparator.comparingInt((int[] a) -> a[1])
+                .thenComparingInt(a -> a[0]));
     }
 
-    private static void sortArrayByMaxMark(int[][] marks, int from, int to) {
-        Arrays.sort(marks, from, to, Comparator.comparingInt((int[] a) -> a[1]).thenComparingInt(a -> a[0]));
-    }
-
-    private static void sortArrayByMinMark(int[][] marks) {
+    private static void sortByMinMark(int[][] marks) {
         Arrays.sort(marks, Comparator.comparingInt(ints -> ints[0]));
     }
 
@@ -123,35 +115,41 @@ public class Solution3 {
         return minMark;
     }
 
-    public static void main(String[] args) {
-//        case 1
-        int studCount = 7;
-        int limitSum = 42;
-        int[][] studMarks = {{5, 5}, {3, 5}, {7, 9}, {6, 7}, {3, 8}, {10, 10}, {1, 1}};
+    public static void main(String[] args) throws IOException {
+        try (var reader = new BufferedReader(new InputStreamReader(System.in))) {
+            String line = reader.readLine();
+            String[] split = line.split("\\s");
+            int studCount = Integer.parseInt(split[0]);
+            int limitSum = Integer.parseInt(split[1]);
 
-        //case 2
-//        int studCount = 3;
-//        int limitSum = 27;
-//        int[][] studMarks = {{11, 14}, {2, 10}, {11, 14}};
-
-        findMaxMedian(studCount, limitSum, studMarks);
+            int[][] studMarks = new int[studCount][2];
+            int sumMin = 0, sumMax = 0;
+            for (int i = 0; i < studCount; i++) {
+                split = reader.readLine().split("\\s");
+                studMarks[i][0] = Integer.parseInt(split[0]);
+                studMarks[i][1] = Integer.parseInt(split[1]);
+                sumMin += studMarks[i][0];
+                sumMax += studMarks[i][1];
+            }
+            System.out.println(findMaxMedian(studCount, limitSum, studMarks, sumMin, sumMax));
+        }
     }
-
-
-//    Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
+//        int studCount = scanner.nextInt();
+//        int limitSum = scanner.nextInt();
 //
-//    int studCount = scanner.nextInt();
-//    int limit = scanner.nextInt();
-//
-//    int[][] studMarks = new int[studCount][2];
-//    int sumMin = 0;
-//    int sumMax = 0;
+//        int[][] studMarks = new int[studCount][2];
+//        int sumMin = 0;
+//        int sumMax = 0;
 //        for (int i = 0; i < studCount; i++) {
-//        int min = scanner.nextInt();
-//        int max = scanner.nextInt();
-//        studMarks[i][0] = min;
-//        studMarks[i][1] = max;
-//        sumMin += min;
-//        sumMax += max;
-//    }
+//            int min = scanner.nextInt();
+//            int max = scanner.nextInt();
+//            studMarks[i][0] = min;
+//            studMarks[i][1] = max;
+//            sumMin += min;
+//            sumMax += max;
+//
+//        findMaxMedian(studCount, limitSum, studMarks);
 }
+
+
