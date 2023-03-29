@@ -7,30 +7,32 @@ import java.util.Arrays;
 
 public class Solution {
 
-    public static int getTimeForReviews(int juniors, int seniors, int reviews) {
+    public static int getTimeForReviews(int juniors,
+                                        int seniors,
+                                        int reviews) {
         int time = 0;
-        int availableSeniors = seniors;
-        int reqReviews;
+        int remainingSeniors = seniors;
+        int remainingReviews;
         for (int i = 1; i <= juniors; i++) {
-            reqReviews = reviews;
-            if (reqReviews == availableSeniors) {
+            remainingReviews = reviews;
+            if (remainingReviews == remainingSeniors) {
                 time++;
-                availableSeniors = seniors;
+                remainingSeniors = seniors;
                 continue;
             }
 
-            if (reqReviews > availableSeniors) {
-                reqReviews -= availableSeniors;
+            if (remainingReviews > remainingSeniors) {
+                remainingReviews -= remainingSeniors;
                 time++;
-                availableSeniors = seniors;
+                remainingSeniors = seniors;
             }
 
-            if (reqReviews < availableSeniors) {
+            if (remainingReviews < remainingSeniors) {
                 if (i == juniors) {
                     time += 1;
                     break;
                 } else {
-                    availableSeniors -= reqReviews;
+                    remainingSeniors -= remainingReviews;
                 }
             }
         }

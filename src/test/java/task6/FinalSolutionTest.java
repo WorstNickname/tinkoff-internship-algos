@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Solution3Test {
+class FinalSolutionTest {
 
     @ParameterizedTest
     @MethodSource("sources")
@@ -19,7 +19,7 @@ class Solution3Test {
             minMarksSum += studMarks[i][0];
             maxMarksSum += studMarks[i][1];
         }
-        var actualResult = Solution3.findMaxMedian(studCount, limitSum, studMarks, minMarksSum, maxMarksSum);
+        var actualResult = FinalSolution.findMaxMedian(studCount, limitSum, studMarks, minMarksSum, maxMarksSum);
 
         assertThat(actualResult).isEqualTo(expected);
     }
@@ -30,7 +30,13 @@ class Solution3Test {
                 Arguments.of(7, 42, new int[][] {{5, 5}, {3, 5}, {7, 9}, {6, 7}, {3, 8}, {10, 10}, {1, 1}}, 7),
                 Arguments.of(5, 5, new int[][] {{1, 100}, {1, 100}, {1, 100}, {1, 100}, {1, 100}}, 1),
                 Arguments.of(5, 500, new int[][] {{1, 100}, {1, 100}, {1, 100}, {1, 100}, {1, 100}}, 100),
-                Arguments.of(5, 1, new int[][] {{1, 100}, {1, 100}, {1, 100}, {1, 100}, {1, 100}}, -1)
+                Arguments.of(5, 1, new int[][] {{1, 100}, {1, 100}, {1, 100}, {1, 100}, {1, 100}}, -1),
+                Arguments.of(5, 15, new int[][] {{3, 3}, {4, 4}, {5, 5}, {1, 6}, {1, 7}}, 3),
+                Arguments.of(1, 100, new int[][] {{100, 200}}, 100),
+                Arguments.of(1, 200, new int[][] {{100, 200}}, 200),
+                Arguments.of(1, 150, new int[][] {{100, 200}}, 150),
+                Arguments.of(1, 1500000000, new int[][] {{1000000000, 2000000000}}, 1500000000),
+                Arguments.of(1, 1000000001, new int[][] {{1000000000, 2000000000}}, 1000000001)
         );
     }
 }

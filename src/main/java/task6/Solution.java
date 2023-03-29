@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class Solution3 {
+public class Solution {
 
     public static int findMaxMedian(int studCount,
                                     int limitSum,

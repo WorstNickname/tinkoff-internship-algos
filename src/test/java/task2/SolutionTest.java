@@ -24,7 +24,9 @@ class SolutionTest {
                 Arguments.of(7, 3, 2, 5),
                 Arguments.of(10000, 10000, 10000, 10000),
                 Arguments.of(7, 6, 3, 4),
-                Arguments.of(1, 1, 1, 1)
+                Arguments.of(1, 1, 1, 1),
+                Arguments.of(30, 20, 1, 2),
+                Arguments.of(30, 20, 10, 15)
         );
     }
 }

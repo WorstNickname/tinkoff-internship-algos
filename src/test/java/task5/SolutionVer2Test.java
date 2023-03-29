@@ -14,7 +14,7 @@ class SolutionVer2Test {
     @ParameterizedTest
     @MethodSource("sources")
     void solutionTest(int length, int[] array, int expected) {
-        var actualResult = SolutionVer2.days(length, array);
+        var actualResult = SolutionVer2.findNormalSubarraysCount(length, array);
 
         assertThat(actualResult).isEqualTo(expected);
     }
@@ -34,7 +34,11 @@ class SolutionVer2Test {
                 Arguments.of(4, new int[]{0, 0, 0, 1}, 9),
                 Arguments.of(4, new int[]{0, -1, -1, 1}, 5),
                 Arguments.of(5,  new int[]{0, -1, -1, 1, -1}, 8),
-                Arguments.of(200000, IntStream.generate(() -> 1000000000).limit(200000).toArray(), 0)
+                Arguments.of(2,  new int[]{1000000000, -1000000000}, 1),
+                Arguments.of(3,  new int[]{1000000000, -1000000000, 0}, 3),
+                Arguments.of(200000, IntStream.generate(() -> 1000000000).limit(200000).toArray(), 0),
+                Arguments.of(100000, IntStream.generate(() -> 1000000000).limit(100000).toArray(), 0),
+                Arguments.of(2, IntStream.generate(() -> 1000000000).limit(2).toArray(), 0)
         );
     }
 }

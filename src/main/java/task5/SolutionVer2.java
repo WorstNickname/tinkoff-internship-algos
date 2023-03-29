@@ -1,36 +1,38 @@
 package task5;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
-
+import java.util.Map;
 
 public class SolutionVer2 {
 
-    public static int days(int length, int[] days) {
-        int sum = 0;
-        int res = 0;
-        HashMap<Integer, Integer> map = new HashMap<>();
-        map.put(0, 1);
-        for (int i = 0; i < days.length; i++) {
-            sum += days[i];
-            if (map.containsKey(sum)) {
-                res = res + (length - i);
+    public static int findNormalSubarraysCount(int length,
+                                               int[] balance) {
+        long sum = 0;
+        int result = 0;
+        Map<Long, Integer> sumMap = new HashMap<>();
+        sumMap.put(sum, 1);
+
+        for (int i = 0; i < length; i++) {
+            sum += balance[i];
+            if (sumMap.containsKey(sum)) {
+                result = result + (length - i);
             }
-            map.put(sum, map.getOrDefault(sum, 0) + 1);
+            sumMap.put(sum, sumMap.getOrDefault(sum, 0) + 1);
         }
-        return res;
+        return result;
     }
 
     public static void main(String[] args) throws IOException {
         try (var reader = new BufferedReader(new InputStreamReader(System.in))) {
-            int length = Integer.parseInt(reader.readLine());
-            int[] array = Arrays.stream(reader.readLine().split(" "))
+            int n = Integer.parseInt(reader.readLine());
+            int[] a = Arrays.stream(reader.readLine().split("\\s"))
                     .mapToInt(Integer::parseInt)
                     .toArray();
-            System.out.println(days(length, array));
+            System.out.println(findNormalSubarraysCount(n, a));
         }
     }
 

@@ -6,40 +6,50 @@ import java.io.InputStreamReader;
 
 public class Solution {
 
-    public static int getMinGoodSubstring(int length, String str) {
-        int left = 0;
-        int right = 0;
-        int min = length;
-        int result = -1;
-        int[] hash = {0, 0, 0, 0};
-
-        if (length < 4 || str.equals("")) {
-            return result;
+    public static int getMinGoodSubstring(int length,
+                                          String s) {
+        if (length < 4 || s == null) {
+            return -1;
         }
 
-        hash[str.charAt(right) - 'a']++;
-        while (right < length) {
-            if (hash[0] > 0 && hash[1] > 0 && hash[2] > 0 && hash[3] > 0) {
-                hash[str.charAt(left) - 'a']--;
-                int subStringLength = str.substring(left, right + 1).length();
-                min = Math.min(subStringLength, min);
-                result = min;
-                left++;
+        int result = -1;
+        int minGoodSubstring = length;
+        int[] charMap = new int[4];
+        int leftPointer = 0;
+        int rightPointer = 0;
+
+        charMap[s.charAt(rightPointer) - 'a']++;
+        while (rightPointer < length) {
+            if (allCharsExist(charMap)) {
+                charMap[s.charAt(leftPointer) - 'a']--;
+                int subStringLength = rightPointer - leftPointer + 1;
+                minGoodSubstring = Math.min(subStringLength, minGoodSubstring);
+                result = minGoodSubstring;
+                leftPointer++;
             } else {
-                right++;
-                if (right < length) {
-                    hash[str.charAt(right) - 'a']++;
+                rightPointer++;
+                if (rightPointer < length) {
+                    charMap[s.charAt(rightPointer) - 'a']++;
                 }
             }
         }
         return result;
     }
 
+    private static boolean allCharsExist(int[] map) {
+        for (int i : map) {
+            if (i <= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) throws IOException {
         try (var reader = new BufferedReader(new InputStreamReader(System.in))) {
-            int length = Integer.parseInt(reader.readLine());
-            String str = reader.readLine();
-            System.out.println(getMinGoodSubstring(length, str));
+            int n = Integer.parseInt(reader.readLine());
+            String s = reader.readLine();
+            System.out.println(getMinGoodSubstring(n, s));
         }
     }
 
